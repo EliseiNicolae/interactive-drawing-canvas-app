@@ -1,15 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="flex gap-5 mt-5">
+    <panel-buttons />
+    <drawable-canvas />
+  </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import DrawableCanvas from "./components/DrawableCanvas.vue";
+import PanelButtons from "@/components/PanelButtons.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    PanelButtons,
+    DrawableCanvas,
   },
 };
 </script>
