@@ -1,21 +1,33 @@
 <template>
-  <div class="canvas-container">
-    <v-stage :config="configKonva">
-      <v-layer>
-        <v-circle :config="configCircle"></v-circle>
-      </v-layer>
-    </v-stage>
+  <div>
+    <div class="canvas-container">
+      <v-stage
+        ref="stage"
+        :config="configKonva"
+        @mouseup="updateDataURL"
+        @touchend="updateDataURL"
+      >
+        <v-layer>
+          <v-circle :config="configCircle"></v-circle>
+        </v-layer>
+      </v-stage>
+    </div>
+    <download-btn :data-url="canvasURL"></download-btn>
   </div>
 </template>
 
 <script>
+import DownloadBtn from "@/components/DownloadBtn.vue";
+
 export default {
   name: "DrawableCanvas",
+  components: { DownloadBtn },
   data() {
     return {
       configKonva: {
-        width: 200,
-        height: 200,
+        width: 600,
+        height: 600,
+        fill: "red",
       },
       configCircle: {
         x: 100,
@@ -24,15 +36,26 @@ export default {
         fill: "red",
         stroke: "black",
         strokeWidth: 4,
+        draggable: true,
       },
+      canvasURL: null,
     };
+  },
+  methods: {
+    updateDataURL() {
+      if (this.$refs.stage) {
+        this.canvasURL = this.$refs.stage.getNode().toDataURL();
+      }
+    },
+  },
+  mounted() {
+    this.updateDataURL();
   },
 };
 </script>
 
 <style scoped>
 .canvas-container {
-  background: blue;
   width: 600px;
   height: 600px;
 }

@@ -31,8 +31,6 @@
       <br />
       <v-slider />
     </div>
-
-    <v-btn color="success">Save</v-btn>
   </div>
 </template>
 
@@ -41,7 +39,6 @@ import { ref, watch } from "vue";
 
 export default {
   name: "PanelButtons",
-  components: {},
   setup() {
     const color = ref("#FF0000"); // Default color red
 
