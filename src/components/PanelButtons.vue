@@ -5,9 +5,15 @@
       Shape drawing
       <br />
       <div class="flex gap-2">
-        <v-btn variant="outlined"> circle</v-btn>
-        <v-btn variant="outlined"> square</v-btn>
-        <v-btn variant="outlined"> triangle</v-btn>
+        <v-btn variant="outlined" @click="addShapeInCanvas(V_CIRCLE)">
+          circle
+        </v-btn>
+        <v-btn variant="outlined" @click="addShapeInCanvas(V_RECT)">
+          square
+        </v-btn>
+        <v-btn variant="outlined" @click="addShapeInCanvas(V_REGULAR_POLYGON)">
+          triangle
+        </v-btn>
       </div>
     </div>
 
@@ -15,7 +21,7 @@
       Freehand Drawing
       <br />
       <div class="flex gap-2">
-        <v-btn variant="outlined"> line</v-btn>
+        <v-btn variant="outlined">Freehand Drawing</v-btn>
       </div>
     </div>
 
@@ -36,9 +42,21 @@
 
 <script>
 import { ref, watch } from "vue";
+import { V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
 
 export default {
   name: "PanelButtons",
+  computed: {
+    V_RECT() {
+      return V_RECT;
+    },
+    V_REGULAR_POLYGON() {
+      return V_REGULAR_POLYGON;
+    },
+    V_CIRCLE() {
+      return V_CIRCLE;
+    },
+  },
   setup() {
     const color = ref("#FF0000"); // Default color red
 
@@ -54,6 +72,11 @@ export default {
     });
 
     return { color };
+  },
+  methods: {
+    addShapeInCanvas(component_name) {
+      this.$store.dispatch("globalState/addNewShape", component_name);
+    },
   },
 };
 </script>

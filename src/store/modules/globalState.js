@@ -1,24 +1,37 @@
+function id() {
+  return Math.round(Math.random() * 10000);
+}
+
 export default {
   namespaced: true,
   state: {
-    text: "test",
+    currentLayout: {
+      id: `layout-${id()}`,
+      width: 600,
+      height: 600,
+      selectedShape: null,
+      shapeObjects: [],
+      imageBase64: "",
+    },
+    historyLayouts: [],
   },
   getters: {
-    getText: (state) => {
-      return state.text;
-    },
+    getCurrentLayout: (state) => state.currentLayout,
   },
   mutations: {
     SET_TEXT(state, data) {
       state.text = data;
+    },
+    ADD_NEW_SHAPE(state, data) {
+      state.currentLayout.shapeObjects.push(data);
     },
   },
   actions: {
     setText({ commit }, data) {
       commit("SET_TEXT", data);
     },
-    getText({ commit }) {
-      commit("GET_TEXT");
+    addNewShape({ commit }, data) {
+      commit("ADD_NEW_SHAPE", data);
     },
   },
 };

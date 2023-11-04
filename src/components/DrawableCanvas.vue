@@ -1,18 +1,26 @@
 <template>
   <div>
-    <div class="canvas-container">
+    <div class="canvas-container" v-if="this.currentLayout">
       <v-stage
         ref="stage"
-        :config="configKonva"
+        :width="this.currentLayout.width"
+        :height="this.currentLayout.height"
         @mouseup="updateDataURL"
         @touchend="updateDataURL"
       >
         <v-layer>
-          <v-circle :config="configCircle"></v-circle>
+          <component
+            v-for="shapeObject in currentLayout.shapeObjects"
+            :is="shapeObject.component_name"
+            v-bind="shapeObject.props"
+            :key="shapeObject.props.id"
+            @dragmove="updateShapePosition"
+            @click="selectShape"
+          ></component>
         </v-layer>
       </v-stage>
     </div>
-    <download-btn :data-url="canvasURL"></download-btn>
+    <download-btn :data-url="this.currentLayout?.imageBase64"></download-btn>
   </div>
 </template>
 
@@ -25,36 +33,31 @@ export default {
   components: { DownloadBtn },
   data() {
     return {
-      configKonva: {
-        width: 600,
-        height: 600,
-        fill: "red",
-      },
-      configCircle: {
-        x: 100,
-        y: 100,
-        radius: 70,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-        draggable: true,
-      },
-      canvasURL: null,
+      currentLayout: null,
     };
   },
   methods: {
     ...mapGetters({
-      getText: "globalState/getText",
+      getCurrentLayout: "globalState/getCurrentLayout",
     }),
     updateDataURL() {
       if (this.$refs.stage) {
-        this.canvasURL = this.$refs.stage.getNode().toDataURL();
+        this.currentLayout.imageBase64 =
+          this.$refs.stage.getNode().toDataURL() || "";
       }
+    },
+    updateShapePosition(event, shapeObject) {
+      console.log("Shape position updated:", shapeObject);
+      // TODO: Update the shape position in Vuex
+    },
+    selectShape(shapeObject) {
+      console.log("Shape selected:", shapeObject);
+      //  TODO: Set selected shape in Vuex and populate the color and stroke size in the panel
     },
   },
   mounted() {
+    this.currentLayout = this.getCurrentLayout();
     this.updateDataURL();
-    console.log("getText", this.getText());
   },
 };
 </script>
