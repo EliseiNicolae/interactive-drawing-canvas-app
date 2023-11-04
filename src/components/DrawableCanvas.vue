@@ -33,7 +33,7 @@
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import { mapGetters } from "vuex";
 import { DEFAULT_VALUES } from "@/constants/constants";
-import { id } from "@/store/modules/globalState";
+import { uuid } from "@/utils/uuid";
 
 export default {
   name: "DrawableCanvas",
@@ -47,7 +47,8 @@ export default {
   },
   methods: {
     ...mapGetters({
-      getCurrentLayout: "globalState/getCurrentLayout",
+      getCurrentLayout: "canvas/getCurrentLayout",
+      getCursorType: "panelButtons/getCursorType",
     }),
     updateDataURL() {
       if (this.$refs.stage) {
@@ -65,14 +66,14 @@ export default {
       this.currentLayout.selectedShape = shapeObject;
     },
     handleMouseDown(e) {
-      this.isDrawing = true;
+      this.isDrawing = this.getCursorType() === "crosshair";
       const pos = e.target.getStage().getPointerPosition();
       this.currentDrawingLines = {
-        id: `v-line-${id()}`,
+        id: `v-line-${uuid()}`,
         tool: "pen",
         points: [pos.x, pos.y],
       };
-      this.$store.dispatch("globalState/addNewShape", {
+      this.$store.dispatch("canvas/addNewShape", {
         component_name: "v-line",
         props: {
           id: this.currentDrawingLines.id,
@@ -91,7 +92,7 @@ export default {
       const point = stage.getPointerPosition();
       this.currentDrawingLines.points.push(point.x, point.y);
 
-      this.$store.dispatch("globalState/editShape", {
+      this.$store.dispatch("canvas/editShape", {
         component_name: "v-line",
         props: {
           id: this.currentDrawingLines.id,

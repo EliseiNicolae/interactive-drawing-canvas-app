@@ -1,12 +1,10 @@
-export function id() {
-  return Math.round(Math.random() * 10000);
-}
+import { uuid } from "@/utils/uuid";
 
 export default {
   namespaced: true,
   state: {
     currentLayout: {
-      id: `layout-${id()}`,
+      id: `layout-${uuid()}`,
       width: 600,
       height: 600,
       selectedShape: null,
@@ -28,19 +26,29 @@ export default {
       );
       shape.props = { ...shape.props, ...data.props };
     },
+    SET_DRAGGABLE(state, data) {
+      state.currentLayout.shapeObjects.map((shape) => {
+        shape.props.draggable = data;
+      });
+    },
   },
   actions: {
     addNewShape({ commit }, data) {
       commit("ADD_NEW_SHAPE", {
         component_name: data.component_name,
         props: {
-          id: data.id ? data.id : `${data.component_name}-${id()}`,
+          id: data.props.id
+            ? data.props.id
+            : `${data.component_name}-${uuid()}`,
           ...data.props,
         },
       });
     },
     editShape({ commit }, data) {
       commit("EDIT_SHAPE", data);
+    },
+    setDraggable({ commit }, data) {
+      commit("SET_DRAGGABLE", data);
     },
   },
 };

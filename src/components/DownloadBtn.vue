@@ -1,5 +1,8 @@
 <template>
-  <v-btn color="success" @click="downloadImage">Download</v-btn>
+  <v-btn color="success" @click="downloadImage">
+    <v-icon icon="mdi-download-box" class="mr-2"></v-icon>
+    Download
+  </v-btn>
 </template>
 
 <script>
