@@ -19,19 +19,19 @@ export default {
     getCurrentLayout: (state) => state.currentLayout,
   },
   mutations: {
-    SET_TEXT(state, data) {
-      state.text = data;
-    },
     ADD_NEW_SHAPE(state, data) {
       state.currentLayout.shapeObjects.push(data);
     },
   },
   actions: {
-    setText({ commit }, data) {
-      commit("SET_TEXT", data);
-    },
     addNewShape({ commit }, data) {
-      commit("ADD_NEW_SHAPE", data);
+      commit("ADD_NEW_SHAPE", {
+        component_name: data.component_name,
+        props: {
+          ...data.props,
+          id: `${data.component_name}-${id()}`,
+        },
+      });
     },
   },
 };

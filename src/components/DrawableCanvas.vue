@@ -14,9 +14,9 @@
             :is="shapeObject.component_name"
             v-bind="shapeObject.props"
             :key="shapeObject.props.id"
-            @dragmove="updateShapePosition"
-            @click="selectShape"
-          ></component>
+            @dragend="updateShapePosition($event, shapeObject)"
+            @click="selectShape(shapeObject)"
+          />
         </v-layer>
       </v-stage>
     </div>
@@ -47,12 +47,13 @@ export default {
       }
     },
     updateShapePosition(event, shapeObject) {
-      console.log("Shape position updated:", shapeObject);
-      // TODO: Update the shape position in Vuex
+      shapeObject.props.x = event.target.x();
+      shapeObject.props.y = event.target.y();
+      this.selectShape(shapeObject);
+      this.updateDataURL();
     },
     selectShape(shapeObject) {
-      console.log("Shape selected:", shapeObject);
-      //  TODO: Set selected shape in Vuex and populate the color and stroke size in the panel
+      this.currentLayout.selectedShape = shapeObject;
     },
   },
   mounted() {

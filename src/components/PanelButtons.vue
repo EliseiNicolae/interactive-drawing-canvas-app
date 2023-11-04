@@ -1,5 +1,5 @@
 <template>
-  <div class="panel-buttons min-[100px] p-5">
+  <div class="panel-buttons max-w-[300px] p-5">
     <h3 class="font-bold text-2xl">Panel buttons</h3>
     <div class="my-3">
       Shape drawing
@@ -25,24 +25,24 @@
       </div>
     </div>
 
-    <div class="my-3">
+    <div class="mb-3 mt-20" v-if="this.currentLayout?.selectedShape">
       Color Picker
       <br />
       <input v-model="color" type="color" />
       <div style="margin-top: 20px">Selected color: {{ color }}</div>
     </div>
 
-    <div class="my-3">
+    <div class="my-3" v-if="this.currentLayout?.selectedShape">
       Brush Size
       <br />
-      <v-slider />
+      <v-slider v-model="strokeWidth" />
     </div>
   </div>
 </template>
 
 <script>
-import { ref, watch } from "vue";
-import { V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
+import { DEFAULT_VALUES, V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
+import { mapGetters } from "vuex";
 
 export default {
   name: "PanelButtons",
@@ -57,26 +57,41 @@ export default {
       return V_CIRCLE;
     },
   },
-  setup() {
-    const color = ref("#FF0000"); // Default color red
-
-    // You can also respond to color changes:
-    const updateColor = (newColor) => {
-      // Perform any action with the new color
-      console.log("Color selected:", newColor);
+  data() {
+    return {
+      currentLayout: null,
+      color: DEFAULT_VALUES.strokeColor,
+      strokeWidth: DEFAULT_VALUES.strokeWidth,
     };
+  },
+  watch: {
+    color(newVal) {
+      this.currentLayout.selectedShape.props.stroke = newVal;
+      console.log("Color changed:", newVal);
+    },
+    strokeWidth(newVal) {
+      this.currentLayout.selectedShape.props.strokeWidth = newVal;
+    },
+    currentLayout: {
+      handler(newVal) {
+        if (!newVal?.selectedShape) return;
 
-    // Watch for changes
-    watch(color, (newColor) => {
-      updateColor(newColor);
-    });
-
-    return { color };
+        this.color = newVal.selectedShape.props.stroke;
+        this.strokeWidth = newVal.selectedShape.props.strokeWidth;
+      },
+      deep: true,
+    },
   },
   methods: {
+    ...mapGetters({
+      getCurrentLayout: "globalState/getCurrentLayout",
+    }),
     addShapeInCanvas(component_name) {
       this.$store.dispatch("globalState/addNewShape", component_name);
     },
+  },
+  mounted() {
+    this.currentLayout = this.getCurrentLayout();
   },
 };
 </script>
