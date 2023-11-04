@@ -18,6 +18,7 @@
 
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "DrawableCanvas",
@@ -42,6 +43,9 @@ export default {
     };
   },
   methods: {
+    ...mapGetters({
+      getText: "globalState/getText",
+    }),
     updateDataURL() {
       if (this.$refs.stage) {
         this.canvasURL = this.$refs.stage.getNode().toDataURL();
@@ -50,6 +54,7 @@ export default {
   },
   mounted() {
     this.updateDataURL();
+    console.log("getText", this.getText());
   },
 };
 </script>

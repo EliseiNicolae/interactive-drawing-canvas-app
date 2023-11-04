@@ -12,7 +12,8 @@
     "konva": "^9.2.3",
     "vue": "^3.3.7",
     "vue-konva": "^3.0.2",
-    "vuetify": "^3.3.23"
+    "vuetify": "^3.3.23",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
