@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div class="canvas-container" v-if="this.currentLayout">
+    <div
+      class="border border-red-500 border-2 shadow-md mb-4"
+      v-if="this.currentLayout"
+    >
       <v-stage
         ref="stage"
         :width="this.currentLayout.width"
         :height="this.currentLayout.height"
-        @mouseup="updateDataURL"
+        @mousedown="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseUp"
         @touchend="updateDataURL"
       >
         <v-layer>
@@ -14,7 +19,7 @@
             :is="shapeObject.component_name"
             v-bind="shapeObject.props"
             :key="shapeObject.props.id"
-            @dragend="updateShapePosition($event, shapeObject)"
+            @dragend="updateElementPosition($event, shapeObject)"
             @click="selectShape(shapeObject)"
           />
         </v-layer>
@@ -27,6 +32,8 @@
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import { mapGetters } from "vuex";
+import { DEFAULT_VALUES } from "@/constants/constants";
+import { id } from "@/store/modules/globalState";
 
 export default {
   name: "DrawableCanvas",
@@ -34,6 +41,8 @@ export default {
   data() {
     return {
       currentLayout: null,
+      isDrawing: false,
+      currentDrawingLines: null,
     };
   },
   methods: {
@@ -46,7 +55,7 @@ export default {
           this.$refs.stage.getNode().toDataURL() || "";
       }
     },
-    updateShapePosition(event, shapeObject) {
+    updateElementPosition(event, shapeObject) {
       shapeObject.props.x = event.target.x();
       shapeObject.props.y = event.target.y();
       this.selectShape(shapeObject);
@@ -54,6 +63,44 @@ export default {
     },
     selectShape(shapeObject) {
       this.currentLayout.selectedShape = shapeObject;
+    },
+    handleMouseDown(e) {
+      this.isDrawing = true;
+      const pos = e.target.getStage().getPointerPosition();
+      this.currentDrawingLines = {
+        id: `v-line-${id()}`,
+        tool: "pen",
+        points: [pos.x, pos.y],
+      };
+      this.$store.dispatch("globalState/addNewShape", {
+        component_name: "v-line",
+        props: {
+          id: this.currentDrawingLines.id,
+          points: [],
+          stroke: DEFAULT_VALUES.strokeColor,
+          strokeWidth: 4,
+          tension: 0.001,
+        },
+      });
+    },
+    handleMouseMove(e) {
+      if (!this.isDrawing) {
+        return;
+      }
+      const stage = e.target.getStage();
+      const point = stage.getPointerPosition();
+      this.currentDrawingLines.points.push(point.x, point.y);
+
+      this.$store.dispatch("globalState/editShape", {
+        component_name: "v-line",
+        props: {
+          id: this.currentDrawingLines.id,
+          points: [...this.currentDrawingLines.points],
+        },
+      });
+    },
+    handleMouseUp() {
+      this.isDrawing = false;
     },
   },
   mounted() {
@@ -63,9 +110,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.canvas-container {
-  width: 600px;
-  height: 600px;
-}
-</style>
+<style scoped></style>

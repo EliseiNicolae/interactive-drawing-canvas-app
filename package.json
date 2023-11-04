@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@mdi/font": "^7.3.67",
     "core-js": "^3.33.2",
     "konva": "^9.2.3",
     "vue": "^3.3.7",

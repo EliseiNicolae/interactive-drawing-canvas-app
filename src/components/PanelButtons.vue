@@ -1,18 +1,18 @@
 <template>
-  <div class="panel-buttons max-w-[300px] p-5">
+  <div class="panel-buttons max-w-[450px] p-5">
     <h3 class="font-bold text-2xl">Panel buttons</h3>
     <div class="my-3">
       Shape drawing
       <br />
       <div class="flex gap-2">
         <v-btn variant="outlined" @click="addShapeInCanvas(V_CIRCLE)">
-          circle
+          <v-icon icon="mdi-circle-outline"></v-icon>
         </v-btn>
         <v-btn variant="outlined" @click="addShapeInCanvas(V_RECT)">
-          square
+          <v-icon icon="mdi-square-outline"></v-icon>
         </v-btn>
         <v-btn variant="outlined" @click="addShapeInCanvas(V_REGULAR_POLYGON)">
-          triangle
+          <v-icon icon="mdi-triangle-outline"></v-icon>
         </v-btn>
       </div>
     </div>
@@ -20,9 +20,23 @@
     <div class="my-3">
       Freehand Drawing
       <br />
-      <div class="flex gap-2">
-        <v-btn variant="outlined">Freehand Drawing</v-btn>
-      </div>
+      <v-btn-toggle
+        v-model="text"
+        rounded="0"
+        color="deep-purple-accent-3"
+        group
+        mandatory
+      >
+        <v-btn value="pointer">
+          <v-icon icon="mdi-cursor-default"></v-icon>
+        </v-btn>
+        <v-btn value="draggable">
+          <v-icon icon="mdi-drag"></v-icon>
+        </v-btn>
+        <v-btn value="freehand">
+          <v-icon icon="mdi-pencil"></v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </div>
 
     <div class="mb-3 mt-20" v-if="this.currentLayout?.selectedShape">
@@ -41,7 +55,12 @@
 </template>
 
 <script>
-import { DEFAULT_VALUES, V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
+import {
+  DEFAULT_VALUES,
+  V_CIRCLE,
+  V_RECT,
+  V_REGULAR_POLYGON,
+} from "@/constants/constants";
 import { mapGetters } from "vuex";
 
 export default {
@@ -62,6 +81,7 @@ export default {
       currentLayout: null,
       color: DEFAULT_VALUES.strokeColor,
       strokeWidth: DEFAULT_VALUES.strokeWidth,
+      text: "pointer",
     };
   },
   watch: {
