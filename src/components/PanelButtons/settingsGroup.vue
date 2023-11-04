@@ -17,15 +17,20 @@
 
 <script>
 import { DEFAULT_VALUES } from "@/constants/constants";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SettingsGroup",
   data() {
     return {
-      currentLayout: null,
       color: DEFAULT_VALUES.strokeColor,
       strokeWidth: DEFAULT_VALUES.strokeWidth,
     };
+  },
+  computed: {
+    ...mapGetters({
+      currentLayout: "canvas/getCurrentLayout",
+    }),
   },
   watch: {
     color(newVal) {

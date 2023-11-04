@@ -21,6 +21,8 @@
 
 <script>
 import { V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
+import { mapGetters } from "vuex";
+import { uuid } from "@/utils/uuid";
 
 export default {
   name: "ShapesGroup",
@@ -36,8 +38,19 @@ export default {
     },
   },
   methods: {
+    ...mapGetters({
+      getCursorType: "panelButtons/getCursorType",
+    }),
     addShapeInCanvas(shape) {
-      this.$store.dispatch("canvas/addNewShape", shape);
+      this.$store.dispatch("canvas/addNewShape", {
+        component_name: shape.component_name,
+        props: {
+          ...shape.props,
+          id: `${shape.component_name}-${uuid()}`,
+          draggable: this.getCursorType() === "grab",
+          addInHistory: true,
+        },
+      });
     },
   },
 };

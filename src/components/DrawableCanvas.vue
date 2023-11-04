@@ -25,7 +25,10 @@
         </v-layer>
       </v-stage>
     </div>
-    <download-btn :data-url="this.currentLayout?.imageBase64"></download-btn>
+    <div class="flex justify-between">
+      <download-btn :data-url="this.currentLayout?.imageBase64" />
+      <undo-redo-buttons :data-url="this.currentLayout?.imageBase64" />
+    </div>
   </div>
 </template>
 
@@ -34,22 +37,24 @@ import DownloadBtn from "@/components/DownloadBtn.vue";
 import { mapGetters } from "vuex";
 import { DEFAULT_VALUES } from "@/constants/constants";
 import { uuid } from "@/utils/uuid";
+import UndoRedoButtons from "@/components/UndoRedoButtons.vue";
 
 export default {
   name: "DrawableCanvas",
-  components: { DownloadBtn },
+  components: { UndoRedoButtons, DownloadBtn },
   data() {
     return {
-      currentLayout: null,
       isDrawing: false,
       currentDrawingLines: null,
     };
   },
-  methods: {
+  computed: {
     ...mapGetters({
-      getCurrentLayout: "canvas/getCurrentLayout",
-      getCursorType: "panelButtons/getCursorType",
+      currentLayout: "canvas/getCurrentLayout",
+      cursorType: "panelButtons/getCursorType",
     }),
+  },
+  methods: {
     updateDataURL() {
       if (this.$refs.stage) {
         this.currentLayout.imageBase64 =
@@ -57,8 +62,15 @@ export default {
       }
     },
     updateElementPosition(event, shapeObject) {
-      shapeObject.props.x = event.target.x();
-      shapeObject.props.y = event.target.y();
+      this.$store.dispatch("canvas/editShape", {
+        component_name: shapeObject.props.component_name,
+        props: {
+          ...shapeObject.props,
+          addInHistory: true,
+          x: event.target.x(),
+          y: event.target.y(),
+        },
+      });
       this.selectShape(shapeObject);
       this.updateDataURL();
     },
@@ -66,7 +78,10 @@ export default {
       this.currentLayout.selectedShape = shapeObject;
     },
     handleMouseDown(e) {
-      this.isDrawing = this.getCursorType() === "crosshair";
+      this.isDrawing = this.cursorType === "crosshair";
+      if (!this.isDrawing) {
+        return;
+      }
       const pos = e.target.getStage().getPointerPosition();
       this.currentDrawingLines = {
         id: `v-line-${uuid()}`,
@@ -101,11 +116,18 @@ export default {
       });
     },
     handleMouseUp() {
-      this.isDrawing = false;
+      if (this.isDrawing) {
+        this.$store.dispatch("canvas/editShape", {
+          props: {
+            id: this.currentDrawingLines.id,
+            addInHistory: true,
+          },
+        });
+        this.isDrawing = false;
+      }
     },
   },
   mounted() {
-    this.currentLayout = this.getCurrentLayout();
     this.updateDataURL();
   },
 };
