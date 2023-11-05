@@ -1,9 +1,9 @@
 <template>
-  <div class="my-3">
+  <div class="mt-3 mb-8">
     <h3 class="font-bold text-2xl">Panel buttons</h3>
-    <div class="my-3">
-      Shape drawing
-      <br />
+    <div class="my-3 flex flex-column gap-2">
+      <h3>Shape drawing</h3>
+
       <div class="flex gap-2">
         <v-btn variant="outlined" @click="addShapeInCanvas(V_CIRCLE)">
           <v-icon icon="mdi-circle-outline"></v-icon>

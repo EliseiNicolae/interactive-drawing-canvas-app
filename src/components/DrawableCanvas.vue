@@ -19,15 +19,16 @@
             :is="shapeObject.component_name"
             v-bind="shapeObject.props"
             :key="shapeObject.props.id"
-            @dragend="updateElementPosition($event, shapeObject)"
+            @dragstart="selectShape(shapeObject)"
             @click="selectShape(shapeObject)"
+            @dragend="updateElementPosition($event, shapeObject)"
           />
         </v-layer>
       </v-stage>
     </div>
     <div class="flex justify-between">
       <download-btn :data-url="this.currentLayout?.imageBase64" />
-      <undo-redo-buttons :data-url="this.currentLayout?.imageBase64" />
+      <undo-redo-buttons />
     </div>
   </div>
 </template>
@@ -71,11 +72,10 @@ export default {
           y: event.target.y(),
         },
       });
-      this.selectShape(shapeObject);
       this.updateDataURL();
     },
     selectShape(shapeObject) {
-      this.currentLayout.selectedShape = shapeObject;
+      this.$store.dispatch("canvas/setSelectedShape", shapeObject);
     },
     handleMouseDown(e) {
       this.isDrawing = this.cursorType === "crosshair";

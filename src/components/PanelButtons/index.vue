@@ -1,5 +1,5 @@
 <template>
-  <div class="panel-buttons max-w-[450px] p-5">
+  <div class="max-w-[350px] w-full p-5">
     <shapes-group />
     <cursor-group />
     <settings-group />

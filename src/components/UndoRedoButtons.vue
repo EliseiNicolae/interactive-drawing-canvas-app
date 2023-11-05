@@ -19,10 +19,6 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "UndoRedoButtons",
-  components: {},
-  props: {
-    dataUrl: String,
-  },
   computed: {
     ...mapGetters({
       historyLayouts: "canvas/getHistoryLayouts",

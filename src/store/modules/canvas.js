@@ -43,6 +43,9 @@ export default {
         shape.props.draggable = data;
       });
     },
+    SET_SELECTED_SHAPE(state, data) {
+      state.currentLayout.selectedShape = data;
+    },
     ADD_IN_HISTORY(state) {
       // Create a deep copy of state.currentLayout
       const currentLayoutCopy = JSON.parse(JSON.stringify(state.currentLayout));
@@ -84,6 +87,9 @@ export default {
     },
     setDraggable({ commit }, data) {
       commit("SET_DRAGGABLE", data);
+    },
+    setSelectedShape({ commit }, data) {
+      commit("SET_SELECTED_SHAPE", data);
     },
     undo({ commit }) {
       commit("UNDO");

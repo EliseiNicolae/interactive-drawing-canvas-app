@@ -1,17 +1,33 @@
 <template>
-  <div class="panel-buttons max-w-[450px] p-5">
-    <div class="mb-3 mt-20" v-if="this.currentLayout?.selectedShape">
+  <div
+    v-if="this.currentLayout?.selectedShape"
+    class="position-relative mb-3 mt-20 p-5 border border-red-500 border-2 shadow-md mb-4"
+  >
+    <div
+      class="position-absolute right-3 top-3 cursor-pointer"
+      @click="onClose"
+    >
+      <v-icon icon="mdi-close-thick"></v-icon>
+    </div>
+    <h3 class="font-bold text-2xl mb-3">Edit</h3>
+    <div>
       Color Picker
       <br />
       <input v-model="color" type="color" />
       <div style="margin-top: 20px">Selected color: {{ color }}</div>
     </div>
 
-    <div class="my-3" v-if="this.currentLayout?.selectedShape">
+    <div class="mt-3">
       Brush Size
       <br />
-      <v-slider v-model="strokeWidth" />
+      <v-slider
+        v-model="strokeWidth"
+        :messages="`strokeWidth${strokeWidth ? strokeWidth.toFixed(1) : '0.0'}`"
+      />
     </div>
+    <p class="text-[10px] max-w-[200px] truncate text-gray-500 ml-auto mt-6">
+      {{ this.currentLayout.selectedShape.props.id }}
+    </p>
   </div>
 </template>
 
@@ -48,6 +64,11 @@ export default {
         this.strokeWidth = newVal.selectedShape.props.strokeWidth;
       },
       deep: true,
+    },
+  },
+  methods: {
+    onClose() {
+      this.$store.dispatch("canvas/setSelectedShape", null);
     },
   },
 };
