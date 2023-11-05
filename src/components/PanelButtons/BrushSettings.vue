@@ -5,6 +5,7 @@
   >
     <div
       class="position-absolute right-3 top-3 cursor-pointer"
+      @click="onClose"
     >
       <v-icon icon="mdi-close-thick"></v-icon>
     </div>
@@ -50,6 +51,11 @@ export default {
       set(newVal) {
         this.$store.dispatch("panel/setBrushWidth", newVal);
       },
+    },
+  },
+  methods: {
+    onClose() {
+      this.$store.dispatch("panel/setCursorType", "default");
     },
   },
 };
