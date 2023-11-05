@@ -6,14 +6,23 @@
     >
       <v-stage
         ref="stage"
-        :width="this.currentLayout.width"
-        :height="this.currentLayout.height"
+        :config="{
+          width: currentLayout.width,
+          height: currentLayout.height,
+        }"
         @mousedown="handleMouseDown"
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
         @touchend="updateDataURL"
       >
         <v-layer>
+          <v-rect
+            :config="{
+              width: currentLayout.width,
+              height: currentLayout.height,
+              fill: 'white',
+            }"
+          />
           <component
             v-for="shapeObject in currentLayout.shapeObjects"
             :is="shapeObject.component_name"
