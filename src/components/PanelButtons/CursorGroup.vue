@@ -47,6 +47,7 @@ export default {
           document.body.style.cursor = "default";
           break;
       }
+      this.$store.dispatch("canvas/setSelectedShape", null);
       this.$store.dispatch("panelButtons/setCursorType", newVal);
     },
   },

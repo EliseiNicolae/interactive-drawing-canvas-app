@@ -48,9 +48,9 @@ export default {
           ...shape.props,
           id: `${shape.component_name}-${uuid()}`,
           draggable: this.getCursorType() === "grab",
-          addInHistory: true,
         },
       });
+      this.$store.dispatch("canvas/addInHistory");
     },
   },
 };

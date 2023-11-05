@@ -55,6 +55,7 @@ export default {
     },
     UNDO(state) {
       if (state.historyIndex > 0) {
+        console.log("undo", state.historyIndex);
         state.historyIndex--;
         // Deep copy the layout from history
         state.currentLayout = JSON.parse(
@@ -64,6 +65,7 @@ export default {
     },
     REDO(state) {
       if (state.historyIndex < state.historyLayouts.length - 1) {
+        console.log("redo", state.historyIndex);
         state.historyIndex++;
         // Deep copy the layout from history
         state.currentLayout = JSON.parse(
@@ -75,15 +77,12 @@ export default {
   actions: {
     async addNewShape({ commit }, data) {
       await commit("ADD_NEW_SHAPE", data);
-      if (data.props.addInHistory) {
-        commit("ADD_IN_HISTORY");
-      }
     },
     editShape({ commit }, data) {
       commit("EDIT_SHAPE", data);
-      if (data.props.addInHistory) {
-        commit("ADD_IN_HISTORY");
-      }
+    },
+    addInHistory({ commit }) {
+      commit("ADD_IN_HISTORY");
     },
     setDraggable({ commit }, data) {
       commit("SET_DRAGGABLE", data);

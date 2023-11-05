@@ -67,11 +67,11 @@ export default {
         component_name: shapeObject.props.component_name,
         props: {
           ...shapeObject.props,
-          addInHistory: true,
           x: event.target.x(),
           y: event.target.y(),
         },
       });
+      this.$store.dispatch("canvas/addInHistory");
       this.updateDataURL();
     },
     selectShape(shapeObject) {
@@ -117,12 +117,7 @@ export default {
     },
     handleMouseUp() {
       if (this.isDrawing) {
-        this.$store.dispatch("canvas/editShape", {
-          props: {
-            id: this.currentDrawingLines.id,
-            addInHistory: true,
-          },
-        });
+        this.$store.dispatch("canvas/addInHistory");
         this.isDrawing = false;
       }
     },

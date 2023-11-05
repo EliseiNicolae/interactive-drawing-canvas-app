@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="this.currentLayout?.selectedShape"
-    class="position-relative mb-3 mt-20 p-5 border border-red-500 border-2 shadow-md mb-4"
+    class="position-relative mt-[85px] p-5 border border-2 shadow-md"
   >
     <div
       class="position-absolute right-3 top-3 cursor-pointer"
@@ -11,18 +11,18 @@
     </div>
     <h3 class="font-bold text-2xl mb-3">Edit</h3>
     <div>
-      Color Picker
+      Stroke Color
       <br />
-      <input v-model="color" type="color" />
-      <div style="margin-top: 20px">Selected color: {{ color }}</div>
+      <input v-model="color" @change="onColorSelected" type="color" />
     </div>
 
     <div class="mt-3">
-      Brush Size
+      Stroke Size
       <br />
       <v-slider
         v-model="strokeWidth"
-        :messages="`strokeWidth${strokeWidth ? strokeWidth.toFixed(1) : '0.0'}`"
+        @end="onStrokeWidthSelected"
+        :messages="`Width: ${strokeWidth ? strokeWidth.toFixed(1) : '0.0'}`"
       />
     </div>
     <p class="text-[10px] max-w-[200px] truncate text-gray-500 ml-auto mt-6">
@@ -36,7 +36,7 @@ import { DEFAULT_VALUES } from "@/constants/constants";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "SettingsGroup",
+  name: "StrokeSettings",
   data() {
     return {
       color: DEFAULT_VALUES.strokeColor,
@@ -50,11 +50,22 @@ export default {
   },
   watch: {
     color(newVal) {
-      this.currentLayout.selectedShape.props.stroke = newVal;
-      console.log("Color changed:", newVal);
+      this.$store.dispatch("canvas/editShape", {
+        component_name: this.currentLayout.selectedShape.component_name,
+        props: {
+          ...this.currentLayout.selectedShape.props,
+          stroke: newVal,
+        },
+      });
     },
     strokeWidth(newVal) {
-      this.currentLayout.selectedShape.props.strokeWidth = newVal;
+      this.$store.dispatch("canvas/editShape", {
+        component_name: this.currentLayout.selectedShape.component_name,
+        props: {
+          ...this.currentLayout.selectedShape.props,
+          strokeWidth: newVal,
+        },
+      });
     },
     currentLayout: {
       handler(newVal) {
@@ -69,6 +80,12 @@ export default {
   methods: {
     onClose() {
       this.$store.dispatch("canvas/setSelectedShape", null);
+    },
+    onColorSelected() {
+      this.$store.dispatch("canvas/addInHistory");
+    },
+    onStrokeWidthSelected() {
+      this.$store.dispatch("canvas/addInHistory");
     },
   },
 };

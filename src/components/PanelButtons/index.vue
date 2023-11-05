@@ -9,7 +9,7 @@
 <script>
 import CursorGroup from "./CursorGroup.vue";
 import ShapesGroup from "./ShapesGroup.vue";
-import SettingsGroup from "./settingsGroup.vue";
+import SettingsGroup from "./strokeSettings.vue";
 
 export default {
   name: "PanelButtons",

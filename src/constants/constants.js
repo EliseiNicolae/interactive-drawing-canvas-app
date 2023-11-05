@@ -1,5 +1,5 @@
 export const DEFAULT_VALUES = {
-  strokeColor: "black",
+  strokeColor: "#000000",
   fill: "transparent",
   strokeWidth: 8,
 };
