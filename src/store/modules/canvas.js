@@ -49,6 +49,7 @@ export default {
     ADD_IN_HISTORY(state) {
       // Create a deep copy of state.currentLayout
       const currentLayoutCopy = JSON.parse(JSON.stringify(state.currentLayout));
+      currentLayoutCopy.selectedShape = null;
       // Now push the copy to the history, ensuring no references are kept
       state.historyLayouts.push(currentLayoutCopy);
       state.historyIndex = state.historyLayouts.length - 1;
