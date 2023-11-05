@@ -10,6 +10,9 @@
         @mousedown="handleMouseDown"
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
+        @touchstart="handleMouseDown"
+        @touchmove="handleMouseMove"
+        @touchend="handleMouseUp"
       >
         <v-layer>
           <v-rect
