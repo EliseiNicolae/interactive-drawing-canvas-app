@@ -1,15 +1,12 @@
 <template>
-  <div>
+  <div class="p-5">
     <div
       class="border border-red-500 border-2 shadow-md mb-4"
       v-if="this.currentLayout"
     >
       <v-stage
         ref="stage"
-        :config="{
-          width: currentLayout.width,
-          height: currentLayout.height,
-        }"
+        :config="{ width: stageWidth, height: stageHeight }"
         @mousedown="handleMouseDown"
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
@@ -17,8 +14,8 @@
         <v-layer>
           <v-rect
             :config="{
-              width: currentLayout.width,
-              height: currentLayout.height,
+              width: stageWidth,
+              height: stageHeight,
               fill: 'white',
             }"
           />
@@ -54,6 +51,8 @@ export default {
     return {
       isDrawing: false,
       currentDrawingLines: null,
+      stageWidth: 0,
+      stageHeight: 0,
     };
   },
   computed: {
@@ -64,19 +63,22 @@ export default {
       brushWidth: "panel/getBrushWidth",
     }),
   },
+  mounted() {
+    this.updateStageSize();
+    window.addEventListener("resize", this.updateStageSize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.updateStageSize);
+  },
   watch: {
     currentLayout: {
       handler() {
-        // Delay the execution of the updateDataURL method until after the DOM has updated
         this.$nextTick(() => {
           if (this.$refs.stage) {
-            // Ensure the canvas has been rendered and updated
             const stage = this.$refs.stage.getStage();
-            // Wait for Konva's next animation frame, as changes might involve visual rendering
             stage.batchDraw();
             stage.toDataURL({
               callback: (dataUrl) => {
-                // This callback ensures that we are getting the data URL after the canvas has rerendered
                 this.currentLayout.imageBase64 = dataUrl;
               },
             });
@@ -87,6 +89,13 @@ export default {
     },
   },
   methods: {
+    updateStageSize() {
+      const isMobile = window.innerWidth < 768;
+      this.stageWidth = isMobile
+        ? window.innerWidth - 42
+        : window.innerWidth - 450;
+      this.stageHeight = 550;
+    },
     updateElementPosition(event, shapeObject) {
       this.$store.dispatch("canvas/editShape", {
         component_name: shapeObject.props.component_name,

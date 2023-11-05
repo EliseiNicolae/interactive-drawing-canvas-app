@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-5 mt-5">
+  <div class="flex gap-5 mt-5 flex-col-reverse md:flex-row">
     <panel-buttons />
     <drawable-canvas />
   </div>

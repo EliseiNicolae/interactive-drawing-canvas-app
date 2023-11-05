@@ -3,8 +3,8 @@ export default {
   state: {
     currentLayout: {
       id: `layout`,
-      width: 600,
-      height: 600,
+      width: window.innerWidth,
+      height: window.innerHeight,
       selectedShape: null,
       shapeObjects: [],
       imageBase64: "",
@@ -12,8 +12,8 @@ export default {
     historyLayouts: [
       {
         id: `layout`,
-        width: 600,
-        height: 600,
+        width: window.innerWidth,
+        height: window.innerHeight,
         selectedShape: null,
         shapeObjects: [],
         imageBase64: "",
