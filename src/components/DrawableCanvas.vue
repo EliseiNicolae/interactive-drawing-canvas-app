@@ -13,7 +13,6 @@
         @mousedown="handleMouseDown"
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
-        @touchend="updateDataURL"
       >
         <v-layer>
           <v-rect
@@ -65,13 +64,29 @@ export default {
       brushWidth: "panel/getBrushWidth",
     }),
   },
-  methods: {
-    updateDataURL() {
-      if (this.$refs.stage) {
-        this.currentLayout.imageBase64 =
-          this.$refs.stage.getNode().toDataURL() || "";
-      }
+  watch: {
+    currentLayout: {
+      handler() {
+        // Delay the execution of the updateDataURL method until after the DOM has updated
+        this.$nextTick(() => {
+          if (this.$refs.stage) {
+            // Ensure the canvas has been rendered and updated
+            const stage = this.$refs.stage.getStage();
+            // Wait for Konva's next animation frame, as changes might involve visual rendering
+            stage.batchDraw();
+            stage.toDataURL({
+              callback: (dataUrl) => {
+                // This callback ensures that we are getting the data URL after the canvas has rerendered
+                this.currentLayout.imageBase64 = dataUrl;
+              },
+            });
+          }
+        });
+      },
+      deep: true,
     },
+  },
+  methods: {
     updateElementPosition(event, shapeObject) {
       this.$store.dispatch("canvas/editShape", {
         component_name: shapeObject.props.component_name,
@@ -82,7 +97,6 @@ export default {
         },
       });
       this.$store.dispatch("canvas/addInHistory");
-      this.updateDataURL();
     },
     selectShape(shapeObject) {
       this.$store.dispatch("canvas/setSelectedShape", shapeObject);
@@ -131,9 +145,6 @@ export default {
         this.isDrawing = false;
       }
     },
-  },
-  mounted() {
-    this.updateDataURL();
   },
 };
 </script>
