@@ -44,3 +44,9 @@ export const V_REGULAR_POLYGON = {
     hitStrokeWidth: 20,
   },
 };
+
+export const CURSOR_TYPE = {
+  DEFAULT: "default",
+  GRAB: "grab",
+  CROSSHAIR: "crosshair",
+};

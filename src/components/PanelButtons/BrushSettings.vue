@@ -29,6 +29,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { CURSOR_TYPE } from "@/constants/constants";
 
 export default {
   name: "BrushSettings",
@@ -55,7 +56,7 @@ export default {
   },
   methods: {
     onClose() {
-      this.$store.dispatch("panel/setCursorType", "default");
+      this.$store.dispatch("panel/setCursorType", CURSOR_TYPE.DEFAULT);
     },
   },
 };

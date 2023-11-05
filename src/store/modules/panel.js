@@ -1,9 +1,9 @@
-import { DEFAULT_VALUES } from "@/constants/constants";
+import { CURSOR_TYPE, DEFAULT_VALUES } from "@/constants/constants";
 
 export default {
   namespaced: true,
   state: {
-    cursorType: "default", // default, grab, crosshair
+    cursorType: CURSOR_TYPE.DEFAULT, // default, grab, crosshair
     brushColor: DEFAULT_VALUES.strokeColor,
     brushWidth: DEFAULT_VALUES.strokeWidth,
   },

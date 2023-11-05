@@ -20,7 +20,12 @@
 </template>
 
 <script>
-import { V_CIRCLE, V_RECT, V_REGULAR_POLYGON } from "@/constants/constants";
+import {
+  CURSOR_TYPE,
+  V_CIRCLE,
+  V_RECT,
+  V_REGULAR_POLYGON,
+} from "@/constants/constants";
 import { mapGetters } from "vuex";
 import { uuid } from "@/utils/uuid";
 
@@ -47,7 +52,7 @@ export default {
         props: {
           ...shape.props,
           id: `${shape.component_name}-${uuid()}`,
-          draggable: this.getCursorType() === "grab",
+          draggable: this.getCursorType() === CURSOR_TYPE.GRAB,
         },
       });
       this.$store.dispatch("canvas/addInHistory");

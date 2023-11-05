@@ -9,13 +9,13 @@
       group
       mandatory
     >
-      <v-btn value="default">
+      <v-btn :value="CURSOR_TYPE.DEFAULT">
         <v-icon icon="mdi-cursor-default"></v-icon>
       </v-btn>
-      <v-btn value="grab">
+      <v-btn :value="CURSOR_TYPE.GRAB">
         <v-icon icon="mdi-drag"></v-icon>
       </v-btn>
-      <v-btn value="crosshair">
+      <v-btn :value="CURSOR_TYPE.CROSSHAIR">
         <v-icon icon="mdi-pencil"></v-icon>
       </v-btn>
     </v-btn-toggle>
@@ -23,9 +23,14 @@
 </template>
 
 <script>
+import { CURSOR_TYPE } from "@/constants/constants";
+
 export default {
   name: "CursorGroup",
   computed: {
+    CURSOR_TYPE() {
+      return CURSOR_TYPE;
+    },
     cursorType: {
       get() {
         return this.$store.getters["panel/getCursorType"];
@@ -38,14 +43,14 @@ export default {
   watch: {
     cursorType(newVal) {
       switch (newVal) {
-        case "grab":
+        case CURSOR_TYPE.GRAB:
           this.$store.dispatch("canvas/setDraggable", true);
           break;
-        case "crosshair":
+        case CURSOR_TYPE.CROSSHAIR:
           this.$store.dispatch("canvas/setDraggable", false);
           break;
         default:
-        case "default":
+        case CURSOR_TYPE.DEFAULT:
           this.$store.dispatch("canvas/setDraggable", false);
           break;
       }

@@ -29,7 +29,7 @@
             :key="shapeObject.props.id"
             @dragstart="selectShape(shapeObject)"
             @click="selectShape(shapeObject)"
-            @dragend="updateElementPosition($event, shapeObject)"
+            @dragend="onStopDragging($event, shapeObject)"
           />
         </v-layer>
       </v-stage>
@@ -46,6 +46,7 @@ import DownloadBtn from "@/components/DownloadBtn.vue";
 import { mapGetters } from "vuex";
 import { uuid } from "@/utils/uuid";
 import UndoRedoButtons from "@/components/UndoRedoButtons.vue";
+import { CURSOR_TYPE } from "@/constants/constants";
 
 export default {
   name: "DrawableCanvas",
@@ -99,22 +100,11 @@ export default {
         : window.innerWidth - 450;
       this.stageHeight = 550;
     },
-    updateElementPosition(event, shapeObject) {
-      this.$store.dispatch("canvas/editShape", {
-        component_name: shapeObject.props.component_name,
-        props: {
-          ...shapeObject.props,
-          x: event.target.x(),
-          y: event.target.y(),
-        },
-      });
-      this.$store.dispatch("canvas/addInHistory");
-    },
     selectShape(shapeObject) {
       this.$store.dispatch("canvas/setSelectedShape", shapeObject);
     },
     handleMouseDown(e) {
-      this.isDrawing = this.cursorType === "crosshair";
+      this.isDrawing = this.cursorType === CURSOR_TYPE.CROSSHAIR;
       if (!this.isDrawing) {
         return;
       }
@@ -156,6 +146,17 @@ export default {
         this.$store.dispatch("canvas/addInHistory");
         this.isDrawing = false;
       }
+    },
+    onStopDragging(event, shapeObject) {
+      this.$store.dispatch("canvas/editShape", {
+        component_name: shapeObject.props.component_name,
+        props: {
+          ...shapeObject.props,
+          x: event.target.x(),
+          y: event.target.y(),
+        },
+      });
+      this.$store.dispatch("canvas/addInHistory");
     },
   },
 };
