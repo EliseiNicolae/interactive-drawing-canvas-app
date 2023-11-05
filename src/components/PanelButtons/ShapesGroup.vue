@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     ...mapGetters({
-      getCursorType: "panelButtons/getCursorType",
+      getCursorType: "panel/getCursorType",
     }),
     addShapeInCanvas(shape) {
       this.$store.dispatch("canvas/addNewShape", {

@@ -1,10 +1,10 @@
 import Vuex from "vuex";
 import canvas from "@/store/modules/canvas";
-import panelButtons from "@/store/modules/panelButtons";
+import panel from "@/store/modules/panel";
 
 export default new Vuex.Store({
   modules: {
     canvas,
-    panelButtons,
+    panel,
   },
 });

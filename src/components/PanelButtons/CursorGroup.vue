@@ -3,7 +3,7 @@
     Freehand Drawing
     <br />
     <v-btn-toggle
-      v-model="cursor"
+      v-model="cursorType"
       rounded="0"
       color="deep-purple-accent-3"
       group
@@ -25,30 +25,33 @@
 <script>
 export default {
   name: "CursorGroup",
-  data() {
-    return {
-      cursor: "default",
-    };
+  computed: {
+    cursorType: {
+      get() {
+        return this.$store.getters["panel/getCursorType"];
+      },
+      set(newVal) {
+        this.$store.dispatch("panel/setCursorType", newVal);
+      },
+    },
   },
   watch: {
-    cursor(newVal) {
+    cursorType(newVal) {
       switch (newVal) {
         case "grab":
           this.$store.dispatch("canvas/setDraggable", true);
-          document.body.style.cursor = "grab";
           break;
         case "crosshair":
           this.$store.dispatch("canvas/setDraggable", false);
-          document.body.style.cursor = "crosshair";
           break;
         default:
         case "default":
           this.$store.dispatch("canvas/setDraggable", false);
-          document.body.style.cursor = "default";
           break;
       }
+      document.body.style.cursor = newVal;
       this.$store.dispatch("canvas/setSelectedShape", null);
-      this.$store.dispatch("panelButtons/setCursorType", newVal);
+      this.$store.dispatch("panel/setCursorType", newVal);
     },
   },
 };

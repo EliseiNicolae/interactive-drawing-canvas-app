@@ -45,7 +45,6 @@
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import { mapGetters } from "vuex";
-import { DEFAULT_VALUES } from "@/constants/constants";
 import { uuid } from "@/utils/uuid";
 import UndoRedoButtons from "@/components/UndoRedoButtons.vue";
 
@@ -61,7 +60,9 @@ export default {
   computed: {
     ...mapGetters({
       currentLayout: "canvas/getCurrentLayout",
-      cursorType: "panelButtons/getCursorType",
+      cursorType: "panel/getCursorType",
+      brushColor: "panel/getBrushColor",
+      brushWidth: "panel/getBrushWidth",
     }),
   },
   methods: {
@@ -102,8 +103,8 @@ export default {
         props: {
           id: this.currentDrawingLines.id,
           points: [],
-          stroke: DEFAULT_VALUES.strokeColor,
-          strokeWidth: 4,
+          stroke: this.brushColor,
+          strokeWidth: this.brushWidth,
           tension: 0.001,
         },
       });
