@@ -8,10 +8,11 @@
 </template>
 
 <script>
-import CursorGroup from "./CursorGroup.vue";
-import ShapesGroup from "./ShapesGroup.vue";
-import StrokeSettings from "./StrokeSettings.vue";
-import BrushSettings from "./BrushSettings.vue";
+
+import BrushSettings from "@/components/PanelButtons/BrushSettings.vue";
+import StrokeSettings from "@/components/PanelButtons/StrokeSettings.vue";
+import ShapesGroup from "@/components/PanelButtons/ShapesGroup.vue";
+import CursorGroup from "@/components/PanelButtons/CursorGroup.vue";
 
 export default {
   name: "PanelButtons",

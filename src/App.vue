@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import DrawableCanvas from "./components/DrawableCanvas.vue";
+import DrawableCanvas from "@/components/DrawableCanvas.vue";
 import PanelButtons from "@/components/PanelButtons/index.vue";
 
 export default {
