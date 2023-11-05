@@ -8,7 +8,6 @@
 </template>
 
 <script>
-
 import BrushSettings from "@/components/PanelButtons/BrushSettings.vue";
 import StrokeSettings from "@/components/PanelButtons/StrokeSettings.vue";
 import ShapesGroup from "@/components/PanelButtons/ShapesGroup.vue";
